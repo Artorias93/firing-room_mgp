@@ -18,18 +18,18 @@ public class BulletManager : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        if (this.name == "BulletS(Clone)") MoveBullet(150);
+        if (this.name == "BulletS(Clone)") MoveBullet(150);                     //Settaggio delle velocità in relazione alla massa
         else if(this.name == "BulletM(Clone)") MoveBullet(750);
         else MoveBullet(1500);
     }
 
     void FixedUpdate()
     {
-        if (rb.velocity.magnitude <= 0.1f)
+        if (rb.velocity.magnitude <= 0.1f)                  //Controllo sulla (quasi) immobilità degli oggetti
         {
             if (checkMove == true)
             {
-                DestroyRest();
+                DestroyRest();                              //Chiamata alla funzione che scandisce il tempo di autodistruzione degli oggetti (quasi) fermi
                 checkMove = false;
             }
         }
@@ -40,7 +40,7 @@ public class BulletManager : MonoBehaviour
         }
     }
 
-    public void DestroyRest()
+    public void DestroyRest()                               //Funzione che scandisce il tempo di autodistruzione degli oggetti (quasi) fermi
     {
         if (deathCountdown > 0)
         {
@@ -50,7 +50,7 @@ public class BulletManager : MonoBehaviour
         else CheckSpawn();
     }
 
-    public void NoCollideTime()
+    public void NoCollideTime()                             //Funzione che scandisce il tempo di invulnerabilità dell'oggetto
     {
         canCollide = true;
 
@@ -64,15 +64,15 @@ public class BulletManager : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Respawn" && canCollide == false) NoCollideTime();
+        if (collision.gameObject.tag == "Respawn" && canCollide == false) NoCollideTime();              //Check sulla "fratellanza" degli oggetti che collidono e chiamata a funzione di invulnerabilità
 
-        if ((collision.gameObject.tag == "TriggerOff" || collision.gameObject.tag == "Untagged") && canCollide == true)
+        if ((collision.gameObject.tag == "TriggerOff" || collision.gameObject.tag == "Untagged") && canCollide == true)             //Check sulla "non fratellanza" degli oggetti
         {
-            CheckSpawn();
+            CheckSpawn();                   //Chiamata a funzione che controlla la dimensione degli oggetti che hanno colliso
         }
     }
 
-    void CheckSpawn()
+    void CheckSpawn()                       //Funzione che controlla la dimensione degli oggetti che hanno colliso
     {
         string objName = this.name;
 
@@ -83,7 +83,7 @@ public class BulletManager : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    void LoopSpawn(GameObject BulletPreF)
+    void LoopSpawn(GameObject BulletPreF)                                   //Funzione che chiama quella di spawn un numero di volte coerente con la massa dell'oggetto distrutto
     {
         if (BulletPreF == BulletPreFS) for (int i = 0; i < 5; i++)
             {
@@ -95,29 +95,29 @@ public class BulletManager : MonoBehaviour
             }
     }
 
-    void Spawn(GameObject BulletPreF)
+    void Spawn(GameObject BulletPreF)                                       //Funzione di spawn
     {
         xVar = this.transform.localEulerAngles.x + Random.Range(-45, 45);
         yVar = this.transform.localEulerAngles.y + Random.Range(-45, 45);
         GameObject newBullet = Instantiate(BulletPreF, transform.position, Quaternion.Euler(xVar, yVar, this.transform.localEulerAngles.z));
     }
 
-    void MoveBullet(int speed)
+    void MoveBullet(int speed)                                              //Funzione che imprime forza agli oggetti instanziati e ne genera il movimento
     {
         rb.AddForce(transform.forward * speed, ForceMode.Impulse);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Respawn") GetComponent<SphereCollider>().isTrigger = false;
+        if (other.gameObject.tag == "Respawn") GetComponent<SphereCollider>().isTrigger = false;            //Disabilitazione del Trigger degli oggetti generati da una collisione, per permetterne altre future
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "TriggerOff")
+        if (other.gameObject.tag == "TriggerOff")                           //Check che identifica le pareti (per attraversarle la prima volta)
         {
             this.tag = "Untagged";
-            GetComponent<SphereCollider>().isTrigger = false;
+            GetComponent<SphereCollider>().isTrigger = false;               //Disabilitazione del Trigger degli oggetti generati inizialmente, per permetterne altre future
             canCollide = true;
         }
     }
