@@ -25,7 +25,7 @@ public class BulletManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (rb.velocity.magnitude <= 0.1f)                  //Controllo sulla (quasi) immobilità degli oggetti
+        if (rb.velocity.magnitude <= 5f)                  //Controllo sulla (quasi) immobilità degli oggetti
         {
             if (checkMove == true)
             {

@@ -1,43 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField]
-    GameObject BulletPreFG;
+    bool fireOn = false;
+    private IEnumerator countdown;
+    public GameObject BulletPreFG;
     public GameObject BulletPreFM;
     public GameObject BulletPreFS;
     GameObject BulletPreF;
-    public double startCountdown = 1f;
+    float waitingTime = 0.4f;
+    float waiting = 0.4f;
 
     void Start()
     {
-        Countdown();
+        int sign = (int)Mathf.Sign(transform.position.x);
+        countdown = Countdown(sign, waitingTime);
+        StartCoroutine(countdown);
     }
 
-    void Countdown()                                //Funzione Timer - Spawn di 2 oggetti per volta allo scadere del countdown
+    public void UpdateTime(float value)
     {
-        if (startCountdown > 0)
-        {
-            startCountdown--;
-            Invoke("Countdown", 0.2f);
-        }
-        else
-        {
-            int size1 = Random.Range(1, 4);                                                             //Assegnazione parametri Primo Oggetto
-            Vector3 posVect1 = new Vector3(-187, 126, 50);
-            Vector3 rotVect1 = new Vector3(Random.Range(-45, 45), Random.Range(45, 135), 0);
+        waiting = waitingTime/value;
+    }
 
-            int size2 = Random.Range(1, 4);                                                             //Assegnazione parametri Secondo Oggetto
-            Vector3 posVect2 = new Vector3(87, 126, 50);
-            Vector3 rotVect2 = new Vector3(Random.Range(-45, 45), Random.Range(-45, -135), 0);
+    public void Fire()
+    {
+        fireOn = !fireOn;
+    }
 
-            Spawn(size1, posVect1, rotVect1);                          //Chiamate a funzione che gestisce lo spawn
-            Spawn(size2, posVect2, rotVect2);
-            
-            startCountdown = 1;
-            Countdown();
+    private IEnumerator Countdown(int sign, float waitTime)                                //Coroutine Timer - Spawn di 1 oggetti allo scadere del countdown
+    {
+        while (true)
+        {
+            int size1 = Random.Range(1, 4);                                                             //Assegnazione parametri oggetto
+            Vector3 posVect1 = new Vector3(transform.position.x + 15 * sign, 126, 50);
+            Vector3 rotVect1 = new Vector3(Random.Range(-45, 45), Random.Range(-sign * 45, -sign * 135), 0);
+            waitTime = waiting;
+
+            if (fireOn) Spawn(size1, posVect1, rotVect1);                          //Chiamate a funzione che gestisce lo spawn
+
+            yield return new WaitForSeconds(waitTime);
         }
     }
 
