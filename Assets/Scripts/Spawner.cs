@@ -17,17 +17,17 @@ public class Spawner : MonoBehaviour
 
     void Start()
     {
-        int sign = (int)Mathf.Sign(transform.position.x);
-        countdown = Countdown(sign, waitingTime);
+        int sign = (int)Mathf.Sign(transform.position.x);                                   //Determinazione posizione (positiva o negativa su x) dello spawner
+        countdown = Countdown(sign, waitingTime);                                           
         StartCoroutine(countdown);
     }
 
-    public void UpdateTime(float value)
+    public void UpdateTime(float value)                                                     //Aggiornamento tempo di sparo, chiamata dall'Inspector degli Slider
     {
         waiting = waitingTime/value;
     }
 
-    public void Fire()
+    public void Fire()                                                                      //Aggiornamento "Sparo" o "Non Sparo", chiamata dall'Inspector dei Button
     {
         fireOn = !fireOn;
     }

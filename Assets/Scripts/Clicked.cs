@@ -8,7 +8,7 @@ public class Clicked : MonoBehaviour
 {
     public GameObject obj;
 
-    public void whenButtonClicked()
+    public void whenButtonClicked()                                                         //Attivazione o Disattivazione di Slider e rispettivo valore, chiamata dall'Inspector dei Button
     {
         if (obj.activeInHierarchy)
         {

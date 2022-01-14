@@ -8,14 +8,12 @@ public class Slider : MonoBehaviour
 {
     Text label;
 
-    // Start is called before the first frame update
     void Start()
     {
         label = GetComponent<Text>();
     }
 
-    // Update is called once per frame
-    public void TextUpdate(float value)
+    public void TextUpdate(float value)                     //Aggiornamento valore dello slider, chiamata dall'Inspector degli Slider
     {
         label.text = decimal.Round((decimal)value, 2) + "";
     }
